@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Matvei 🎉</title>
+<style>
+body { font-family: Arial; text-align: center; background: #111; color: #fff; }
+.hidden { display: none; }
+button { padding: 10px 20px; margin: 10px; font-size: 16px; }
+canvas { background: #000; border: 2px solid #fff; }
+</style>
+</head>
+<body>
+
+<h1>🎂 Happy Birthday Matvei! 🎂</h1>
+<p>Complete all 3 mini games to unlock your gift 🎁</p>
+
+<!-- Game 1 -->
+<div id="game1">
+<h2>Mini Game 1: Catch the Triangle</h2>
+<p>Click the triangle 5 times to win!</p>
+<canvas id="canvas" width="300" height="300"></canvas>
+<p>Hits: <span id="hits">0</span>/5</p>
+<button onclick="completeGame1()">too hard</button>
+</div>
+
+<!-- Game 2 -->
+<div id="game2" class="hidden">
+<h2>Mini Game 2</h2>
+<p>Play this game:</p>
+<a href="https://www.linkedin.com/games/patches/" target="_blank">
+<button>Open Game</button>
+</a>
+<button onclick="completeGame2()">I finished it</button>
+</div>
+
+<!-- Game 3 -->
+<div id="game3" class="hidden">
+<h2>Mini Game 3: Guess My Favorite Drink</h2>
+<input type="text" id="answer" placeholder="Type your guess">
+<button onclick="checkAnswer()">Submit</button>
+</div>
+
+<!-- Final -->
+<div id="final" class="hidden">
+<h2>🎁 Congratulations Matvei! 🎁</h2>
+<p>You have completed all games and unlocked your birthday gift!</p>
+<img src="spongebob-patrick.gif" alt="Celebration GIF" style="width:250px; margin-top:20px; border-radius:12px;">
+
+</div>
+
+<script>
+let canvas = document.getElementById('canvas');
+let ctx = canvas.getContext('2d');
+let x = 150, y = 150;
+let dx = 5, dy = 6;
+let hits = 0;
+
+function drawTriangle() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(Date.now() / 200);
+    ctx.beginPath();
+    ctx.moveTo(0, -15);
+    ctx.lineTo(15, 15);
+    ctx.lineTo(-15, 15);
+    ctx.closePath();
+    ctx.fillStyle = 'red';
+    ctx.fill();
+    ctx.restore();
+
+    x += dx;
+    y += dy;
+
+    if (x < 0 || x > canvas.width) dx *= -1;
+    if (y < 0 || y > canvas.height) dy *= -1;
+}
+
+canvas.addEventListener('click', function(e) {
+    let rect = canvas.getBoundingClientRect();
+    let mx = e.clientX - rect.left;
+    let my = e.clientY - rect.top;
+
+    if (Math.abs(mx - x) < 20 && Math.abs(my - y) < 20) {
+        hits++;
+        document.getElementById('hits').innerText = hits;
+        if (hits >= 5) {
+            document.getElementById('game1').classList.add('hidden');
+            document.getElementById('game2').classList.remove('hidden');
+        }
+    }
+});
+
+setInterval(drawTriangle, 30);
+
+function completeGame1() {
+    document.getElementById('game1').classList.add('hidden');
+    document.getElementById('game2').classList.remove('hidden');
+}
+function completeGame2() {
+    document.getElementById('game2').classList.add('hidden');
+    document.getElementById('game3').classList.remove('hidden');
+}
+
+function checkAnswer() {
+    document.getElementById('game3').classList.add('hidden');
+    document.getElementById('final').classList.remove('hidden');
+}
+</script>
+
+</body>
+</html>
